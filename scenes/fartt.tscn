@@ -2,23 +2,23 @@
 
 [ext_resource type="Script" uid="uid://if54o27kpkj3" path="res://scripts/ray_cast_2d.gd" id="1_0cd71"]
 [ext_resource type="Texture2D" uid="uid://caujmgyjgou4j" path="res://sprites/Sprite-0001.png" id="2_4bj5o"]
-[ext_resource type="Texture2D" uid="uid://bcajt161ku76q" path="res://sprites/icon.svg" id="3_nabjq"]
 
-[sub_resource type="GDScript" id="GDScript_asise"]
-script/source = "extends Evil_meteor
+[sub_resource type="GDScript" id="GDScript_bo1ho"]
+script/source = "extends Node
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+#This node is for controlling the game. aka the spawns and what not.
+var Meteor = preload(\"res://scenes/meteor.tscn\")
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+
+
+func _on_timer_timeout() -> void:
+	var instance = Meteor.instantiate()
+	var random_x_pos = randi_range(-237, 241)
+	var random_y_pos = randi_range(-131, 75)
+	instance.position = Vector2(random_x_pos, random_y_pos)
+	add_child(instance)
 "
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ay3rs"]
 
 [node name="Node2D" type="Node2D" unique_id=42832220]
 
@@ -43,95 +43,14 @@ rotation = 1.5728201
 scale = Vector2(0.2645381, 0.30934373)
 texture = ExtResource("2_4bj5o")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1390015750]
-script = SubResource("GDScript_asise")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=670392634]
-position = Vector2(113, 0)
-shape = SubResource("RectangleShape2D_ay3rs")
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=121615061]
-position = Vector2(114, 0)
-scale = Vector2(0.15625, 0.1328125)
-texture = ExtResource("3_nabjq")
-
-[node name="Area2D2" type="Area2D" parent="." unique_id=1700757328]
-position = Vector2(-70, -20)
-script = SubResource("GDScript_asise")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2" unique_id=1451180103]
-position = Vector2(113, 0)
-shape = SubResource("RectangleShape2D_ay3rs")
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D2" unique_id=1686905804]
-position = Vector2(114, 0)
-scale = Vector2(0.15625, 0.1328125)
-texture = ExtResource("3_nabjq")
-
-[node name="Area2D3" type="Area2D" parent="." unique_id=904580357]
-position = Vector2(-132, -32)
-script = SubResource("GDScript_asise")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D3" unique_id=2025546601]
-position = Vector2(113, 0)
-shape = SubResource("RectangleShape2D_ay3rs")
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D3" unique_id=454194503]
-position = Vector2(114, 0)
-scale = Vector2(0.15625, 0.1328125)
-texture = ExtResource("3_nabjq")
-
-[node name="Area2D4" type="Area2D" parent="." unique_id=910952765]
-position = Vector2(-182, -20)
-script = SubResource("GDScript_asise")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D4" unique_id=957436508]
-position = Vector2(113, 0)
-shape = SubResource("RectangleShape2D_ay3rs")
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D4" unique_id=500501010]
-position = Vector2(114, 0)
-scale = Vector2(0.15625, 0.1328125)
-texture = ExtResource("3_nabjq")
-
-[node name="Area2D5" type="Area2D" parent="." unique_id=1781459541]
-position = Vector2(-234, -20)
-script = SubResource("GDScript_asise")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D5" unique_id=1047883616]
-position = Vector2(113, 0)
-shape = SubResource("RectangleShape2D_ay3rs")
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D5" unique_id=1569713918]
-position = Vector2(114, 0)
-scale = Vector2(0.15625, 0.1328125)
-texture = ExtResource("3_nabjq")
-
-[node name="Area2D6" type="Area2D" parent="." unique_id=1830817347]
-position = Vector2(-304, -47)
-script = SubResource("GDScript_asise")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D6" unique_id=1417713578]
-position = Vector2(113, 0)
-shape = SubResource("RectangleShape2D_ay3rs")
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D6" unique_id=658057321]
-position = Vector2(114, 0)
-scale = Vector2(0.15625, 0.1328125)
-texture = ExtResource("3_nabjq")
-
-[node name="Area2D7" type="Area2D" parent="." unique_id=971431586]
-position = Vector2(86, 20)
-script = SubResource("GDScript_asise")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D7" unique_id=1302092620]
-position = Vector2(113, 0)
-shape = SubResource("RectangleShape2D_ay3rs")
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D7" unique_id=1301364237]
-position = Vector2(114, 0)
-scale = Vector2(0.15625, 0.1328125)
-texture = ExtResource("3_nabjq")
-
 [node name="Camera2D" type="Camera2D" parent="." unique_id=802718393]
 zoom = Vector2(2.38, 2.38)
+
+[node name="Gamecontroller" type="Node" parent="." unique_id=1454518106]
+script = SubResource("GDScript_bo1ho")
+
+[node name="Timer" type="Timer" parent="Gamecontroller" unique_id=748007817]
+wait_time = 4.2
+autostart = true
+
+[connection signal="timeout" from="Gamecontroller/Timer" to="Gamecontroller" method="_on_timer_timeout"]
