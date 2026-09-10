@@ -42,6 +42,7 @@ collide_with_areas = true
 script = ExtResource("1_0cd71")
 
 [node name="Line2D" type="Line2D" parent="RayCast2D" unique_id=1751189147]
+visible = false
 modulate = Color(0.9764864, 0, 0.20844513, 1)
 points = PackedVector2Array(0, 0, 144, 0)
 begin_cap_mode = 2
