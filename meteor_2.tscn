@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://ugkckkwpyd5u"]
+
+[ext_resource type="Texture2D" uid="uid://b8n7y6q8ii7ba" path="res://sprites/Sprite-0002.png" id="1_cquic"]
+
+[sub_resource type="GDScript" id="GDScript_cquic"]
+script/source = "extends Evil_meteor
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	health = 150
+	reward = randi_range(5,20)
+	rotation_speed = 1
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b3qad"]
+
+[node name="Meteor2" type="Area2D" unique_id=2086375480]
+scale = Vector2(0.75999963, 0.7599996)
+script = SubResource("GDScript_cquic")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=512071298]
+position = Vector2(2, -2.9999998)
+scale = Vector2(1.095, 1.095)
+texture = ExtResource("1_cquic")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1447484650]
+scale = Vector2(3, 3)
+shape = SubResource("CircleShape2D_b3qad")

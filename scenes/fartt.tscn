@@ -9,6 +9,7 @@ script/source = "extends Node
 
 @onready var Currency: Label = $\"../Label\"
 #This node is for controlling the game. aka the spawns and what not.
+var Meteor2 = preload(\"res://meteor_2.tscn\")
 var Meteor = preload(\"res://scenes/meteor.tscn\")
 var minerals = 0
 
@@ -16,7 +17,13 @@ func _process(delta: float) -> void:
 	Currency.text = \"Minerals : \" + str(minerals)
 
 func _on_timer_timeout() -> void:
-	var instance = Meteor.instantiate()
+	var weight = randi_range(1,3)
+	var choosen_meteor = null
+	if weight <= 2:
+		choosen_meteor = Meteor
+	else:
+		choosen_meteor = Meteor2
+	var instance = choosen_meteor.instantiate()
 	var random_x_pos = randi_range(-237, 241)
 	var random_y_pos = randi_range(-131, 75)
 	instance.position = Vector2(random_x_pos, random_y_pos)
@@ -27,7 +34,7 @@ func _on_timer_timeout() -> void:
 [node name="Node2D" type="Node2D" unique_id=42832220]
 
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=1969228750]
-position = Vector2(-2.9802322e-08, 130)
+position = Vector2(0, 152.00002)
 rotation = -1.5740972
 enabled = false
 target_position = Vector2(500, 0)
@@ -35,7 +42,6 @@ collide_with_areas = true
 script = ExtResource("1_0cd71")
 
 [node name="Line2D" type="Line2D" parent="RayCast2D" unique_id=1751189147]
-visible = false
 modulate = Color(0.9764864, 0, 0.20844513, 1)
 points = PackedVector2Array(0, 0, 144, 0)
 begin_cap_mode = 2
@@ -48,7 +54,8 @@ scale = Vector2(0.2645381, 0.30934373)
 texture = ExtResource("2_4bj5o")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=802718393]
-zoom = Vector2(2.38, 2.38)
+scale = Vector2(1.6567029, 0.9)
+zoom = Vector2(2.03, 2.03)
 
 [node name="Gamecontroller" type="Node" parent="." unique_id=1454518106]
 script = SubResource("GDScript_bo1ho")
@@ -58,10 +65,10 @@ wait_time = 4.2
 autostart = true
 
 [node name="Label" type="Label" parent="." unique_id=1925039528]
-offset_left = -222.0
-offset_top = 100.0
-offset_right = -133.0
-offset_bottom = 136.0
+offset_left = -225.0
+offset_top = 121.0
+offset_right = -136.0
+offset_bottom = 157.0
 theme_override_constants/outline_size = 6
 text = "Minerals : 0"
 horizontal_alignment = 1

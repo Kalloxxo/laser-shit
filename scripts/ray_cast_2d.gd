@@ -11,6 +11,7 @@ extends RayCast2D
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("fart"):
 		enabled = true
+		force_raycast_update()
 		line_2d.visible = true 
 		var fart = get_collider()
 		if fart is Evil_meteor:

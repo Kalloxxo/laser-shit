@@ -1,32 +1,27 @@
 [gd_scene format=3 uid="uid://c3cxbu5qukg00"]
 
-[ext_resource type="Texture2D" uid="uid://bcajt161ku76q" path="res://sprites/icon.svg" id="1_tcwo0"]
+[ext_resource type="Texture2D" uid="uid://b8n7y6q8ii7ba" path="res://sprites/Sprite-0002.png" id="1_tcwo0"]
 
 [sub_resource type="GDScript" id="GDScript_pxso2"]
 script/source = "extends Evil_meteor
 
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	rotation_speed = 2.5
 "
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_83eji"]
-size = Vector2(27, 27)
+[sub_resource type="CircleShape2D" id="CircleShape2D_pxso2"]
 
 [node name="Meteor" type="Area2D" unique_id=1202968352]
 script = SubResource("GDScript_pxso2")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1961647884]
-position = Vector2(3.4999993, -3.4999995)
-scale = Vector2(0.21093749, 0.2109375)
+position = Vector2(1.4210855e-14, -5.684342e-14)
+scale = Vector2(0.35, 0.342)
 texture = ExtResource("1_tcwo0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1288161124]
-position = Vector2(3.5, -3.5)
-shape = SubResource("RectangleShape2D_83eji")
+shape = SubResource("CircleShape2D_pxso2")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1080173761]
