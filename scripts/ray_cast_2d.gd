@@ -3,6 +3,7 @@ extends RayCast2D
 
 @onready var sprite_2d: Sprite2D = $"../Area2D/Sprite2D"
 @onready var line_2d: Line2D = $Line2D
+@onready var gamecontroller: Node = $"../Gamecontroller"
 
 
 
@@ -15,6 +16,7 @@ func _process(delta: float) -> void:
 		if fart is Evil_meteor:
 			fart.health -= 90 * delta
 			if fart.health <= 0:
+				gamecontroller.minerals += fart.reward
 				fart.queue_free()
 
 		

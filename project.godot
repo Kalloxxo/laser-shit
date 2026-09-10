@@ -15,6 +15,10 @@ run/main_scene="uid://srsi5qedcelk"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://sprites/icon.svg"
 
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
 [input]
 
 fart={
