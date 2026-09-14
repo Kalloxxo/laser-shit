@@ -10,3 +10,12 @@ might add a second meteor soon. (tommorrow ill do both)
 9/10/26 (an hour later)
 added second meteor, and updated the meteor sprites! i also made them spin for some good feel.
 Might be adding upgrades and simple SFX next time, and HOPEFULLY that windup animation (no promises)
+
+9/14/26
+holy fucking SHIT dude
+added the first wave based system (no incrementing yet)
+and added like a timer
+tommorrow will be for the proper intermission/upgrades
+the health to make the gameloop complete
+meteorspawn scaling + timer scaling
+and that should be about it for this prototype.

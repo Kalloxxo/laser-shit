@@ -5,35 +5,101 @@
 
 [sub_resource type="GDScript" id="GDScript_bo1ho"]
 script/source = "extends Node
-
-
-@onready var Currency: Label = $\"../Label\"
 #This node is for controlling the game. aka the spawns and what not.
+
+#Connections
+@onready var play_button: Button = $\"../PlayButton\"
+@onready var Currency: Label = $\"../Label\"
+@onready var ray_cast_2d: RayCast2D = $\"../RayCast2D\"
+@onready var timer: Label = $\"../Timer\"
+@onready var title: Label = $\"../Title\"
+
+
+#Meteor types.
 var Meteor2 = preload(\"res://meteor_2.tscn\")
 var Meteor = preload(\"res://scenes/meteor.tscn\")
+
+#Variables.
+var TimeLeft = 60
 var minerals = 0
+var meteorsLeft = 0
+var MeteorsToSpawn = 5
+var playing = false
+var intermission = false
+var WaveCounter = 0
 
-func _process(delta: float) -> void:
+#Code below! beware!
+
+func _process(_delta: float) -> void:
 	Currency.text = \"Minerals : \" + str(minerals)
-
-func _on_timer_timeout() -> void:
-	var weight = randi_range(1,3)
-	var choosen_meteor = null
-	if weight <= 2:
-		choosen_meteor = Meteor
-	else:
-		choosen_meteor = Meteor2
-	var instance = choosen_meteor.instantiate()
-	var random_x_pos = randi_range(-237, 241)
-	var random_y_pos = randi_range(-131, 75)
-	instance.position = Vector2(random_x_pos, random_y_pos)
-	add_child(instance)
 	
+	
+
+
+
+# This timer runs every 4.2 seconds, its used for spawning meteors and handling meteor related variables sometimes.
+func _on_timer_timeout() -> void:
+	if playing == true and intermission == false and  MeteorsToSpawn > 0:
+		var weight = randi_range(1,3)
+		var choosen_meteor = null
+		if weight <= 2:
+			choosen_meteor = Meteor
+		else:
+			choosen_meteor = Meteor2
+		var instance = choosen_meteor.instantiate()
+		var random_x_pos = randi_range(-237, 241)
+		var random_y_pos = randi_range(-131, 75)
+		instance.position = Vector2(random_x_pos, random_y_pos)
+		add_child(instance)
+		MeteorsToSpawn -= 1
+		
+		meteorsLeft += 1
+		
+	
+
+
+func _on_play_button_pressed() -> void:
+	playing = true
+	intermission = false
+	play_button.visible = false
+	ray_cast_2d.visible = true
+	Currency.visible = true
+	WaveCounter += 1
+	title.visible = false
+
+#The timer below runs every second, handling most game logic.
+func _on_timer_2_timeout() -> void:
+	if intermission == true:
+		ray_cast_2d.visible = false
+		play_button.visible = true
+	if MeteorsToSpawn <= 0 and meteorsLeft <= 0:
+		TimeLeft = 0
+	print(meteorsLeft)
+	print(MeteorsToSpawn)
+	
+	if playing == true and intermission == false:
+		timer.visible = true
+		TimeLeft -= 1
+		timer.text = \"TIME LEFT : \" + str(TimeLeft)
+		if TimeLeft <= 0:
+			meteorsLeft = 0
+			intermission = true
+			TimeLeft = 60
+			MeteorsToSpawn = 5
+			timer.visible = false
+			ray_cast_2d.visible = false
+			playing = false
+			var fart = get_children()
+			for child in fart:
+				if child is Evil_meteor:
+					child.queue_free()
+					
 "
 
 [node name="Node2D" type="Node2D" unique_id=42832220]
 
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=1969228750]
+visible = false
 position = Vector2(0, 152.00002)
 rotation = -1.5740972
 enabled = false
@@ -65,7 +131,11 @@ script = SubResource("GDScript_bo1ho")
 wait_time = 4.2
 autostart = true
 
+[node name="Timer2" type="Timer" parent="Gamecontroller" unique_id=1947847568]
+autostart = true
+
 [node name="Label" type="Label" parent="." unique_id=1925039528]
+visible = false
 offset_left = -225.0
 offset_top = 121.0
 offset_right = -136.0
@@ -75,4 +145,36 @@ text = "Minerals : 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="PlayButton" type="Button" parent="." unique_id=307461048]
+offset_left = -74.0
+offset_top = 78.0
+offset_right = 77.0
+offset_bottom = 112.0
+text = "PLAY"
+
+[node name="Timer" type="Label" parent="." unique_id=1355247547]
+visible = false
+offset_left = -83.0
+offset_top = -150.0
+offset_right = 83.0
+offset_bottom = -105.0
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 21
+text = "TIME LEFT :"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title" type="Label" parent="." unique_id=1376933946]
+offset_left = -99.0
+offset_top = -106.0
+offset_right = 102.0
+offset_bottom = -38.0
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 23
+text = "LASER MINING 1.0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="timeout" from="Gamecontroller/Timer" to="Gamecontroller" method="_on_timer_timeout"]
+[connection signal="timeout" from="Gamecontroller/Timer2" to="Gamecontroller" method="_on_timer_2_timeout"]
+[connection signal="pressed" from="PlayButton" to="Gamecontroller" method="_on_play_button_pressed"]

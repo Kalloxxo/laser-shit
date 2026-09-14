@@ -9,7 +9,7 @@ extends RayCast2D
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if Input.is_action_pressed("fart"):
+	if Input.is_action_pressed("fart") and gamecontroller.playing == true:
 		enabled = true
 		force_raycast_update()
 		line_2d.visible = true 
@@ -19,6 +19,7 @@ func _process(delta: float) -> void:
 			if fart.health <= 0:
 				gamecontroller.minerals += fart.reward
 				fart.queue_free()
+				gamecontroller.meteorsLeft -= 1
 
 		
 	if Input.is_action_just_released("fart"):
