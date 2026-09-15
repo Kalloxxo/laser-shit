@@ -13,6 +13,9 @@ script/source = "extends Node
 @onready var ray_cast_2d: RayCast2D = $\"../RayCast2D\"
 @onready var timer: Label = $\"../Timer\"
 @onready var title: Label = $\"../Title\"
+@onready var wavecounter: Label = $\"../Wavecounter\"
+@onready var upgrade_button: Button = $\"../UpgradeButton\"
+@onready var healthlabel: Label = $\"../Healthlabel\"
 
 
 #Meteor types.
@@ -20,20 +23,22 @@ var Meteor2 = preload(\"res://meteor_2.tscn\")
 var Meteor = preload(\"res://scenes/meteor.tscn\")
 
 #Variables.
-var TimeLeft = 60
+var TimeLeft = 30
+var Timercounter = 30
 var minerals = 0
 var meteorsLeft = 0
 var MeteorsToSpawn = 5
+var meteorstospawnFR = 5
 var playing = false
 var intermission = false
 var WaveCounter = 0
+var health = 100
+var meteorIncrease = 1.25
+var timeIncrease = 1.05
 
 #Code below! beware!
 
-func _process(_delta: float) -> void:
-	Currency.text = \"Minerals : \" + str(minerals)
-	
-	
+
 
 
 
@@ -66,12 +71,22 @@ func _on_play_button_pressed() -> void:
 	Currency.visible = true
 	WaveCounter += 1
 	title.visible = false
+	wavecounter.visible = true
+	healthlabel.visible = true
 
 #The timer below runs every second, handling most game logic.
 func _on_timer_2_timeout() -> void:
+	Currency.text = \"Minerals : \" + str(minerals)
+	healthlabel.text = \"HEALTH : \" + str(health)
+	wavecounter.text = \"WAVE : \" + str(WaveCounter)
+	
+	if health <= 0:
+		get_tree().reload_current_scene()
 	if intermission == true:
 		ray_cast_2d.visible = false
 		play_button.visible = true
+		upgrade_button.visible = true
+
 	if MeteorsToSpawn <= 0 and meteorsLeft <= 0:
 		TimeLeft = 0
 	print(meteorsLeft)
@@ -79,21 +94,48 @@ func _on_timer_2_timeout() -> void:
 	
 	if playing == true and intermission == false:
 		timer.visible = true
+		upgrade_button.visible = false
 		TimeLeft -= 1
 		timer.text = \"TIME LEFT : \" + str(TimeLeft)
 		if TimeLeft <= 0:
+			#Logic and such.
+			health -= meteorsLeft * 10
 			meteorsLeft = 0
 			intermission = true
-			TimeLeft = 60
-			MeteorsToSpawn = 5
+			playing = false
+			
+			#Time releated things.
+			Timercounter *= timeIncrease
+			Timercounter = roundi(Timercounter)
+			TimeLeft = Timercounter
+			
+			#Meteor scaling
+			meteorstospawnFR *= meteorIncrease
+			meteorstospawnFR = roundi(meteorstospawnFR)
+			MeteorsToSpawn = meteorstospawnFR
+			
+			#Ui stuff.
 			timer.visible = false
 			ray_cast_2d.visible = false
-			playing = false
+			
+			#Clearing.
 			var fart = get_children()
 			for child in fart:
 				if child is Evil_meteor:
 					child.queue_free()
 					
+"
+
+[sub_resource type="GDScript" id="GDScript_0cd71"]
+script/source = "extends Button
+
+var upgradeprice = 25
+var upgradeincrease = 1.25
+var damageincrease = 1.05
+
+
+func _on_timer_2_timeout() -> void:
+	text = \"INCREASE LASER POWER : \" + str(upgradeprice)
 "
 
 [node name="Node2D" type="Node2D" unique_id=42832220]
@@ -128,7 +170,7 @@ zoom = Vector2(2.03, 2.03)
 script = SubResource("GDScript_bo1ho")
 
 [node name="Timer" type="Timer" parent="Gamecontroller" unique_id=748007817]
-wait_time = 4.2
+wait_time = 2.0
 autostart = true
 
 [node name="Timer2" type="Timer" parent="Gamecontroller" unique_id=1947847568]
@@ -175,6 +217,42 @@ text = "LASER MINING 1.0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Wavecounter" type="Label" parent="." unique_id=1751860400]
+visible = false
+offset_left = -277.0
+offset_top = -155.0
+offset_right = -161.0
+offset_bottom = -111.0
+theme_override_constants/outline_size = 8
+text = "WAVE :"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradeButton" type="Button" parent="." unique_id=22963961]
+visible = false
+offset_left = 124.0
+offset_top = 66.0
+offset_right = 271.0
+offset_bottom = 120.0
+theme_override_constants/outline_size = 9
+text = "INCREASE LASER POWER : 25"
+autowrap_mode = 3
+script = SubResource("GDScript_0cd71")
+
+[node name="Healthlabel" type="Label" parent="." unique_id=1223899439]
+visible = false
+offset_left = 119.0
+offset_top = -150.0
+offset_right = 262.0
+offset_bottom = -103.0
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 20
+text = "HEALTH : 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="timeout" from="Gamecontroller/Timer" to="Gamecontroller" method="_on_timer_timeout"]
 [connection signal="timeout" from="Gamecontroller/Timer2" to="Gamecontroller" method="_on_timer_2_timeout"]
+[connection signal="timeout" from="Gamecontroller/Timer2" to="UpgradeButton" method="_on_timer_2_timeout"]
 [connection signal="pressed" from="PlayButton" to="Gamecontroller" method="_on_play_button_pressed"]
+[connection signal="pressed" from="UpgradeButton" to="RayCast2D" method="_on_upgrade_button_pressed"]

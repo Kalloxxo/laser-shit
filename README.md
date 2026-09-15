@@ -19,3 +19,10 @@ tommorrow will be for the proper intermission/upgrades
 the health to make the gameloop complete
 meteorspawn scaling + timer scaling
 and that should be about it for this prototype.
+
+9/15/26
+I FINSIHED!! EVERYTHING!! BLAHHH!!
+added HEALTH!
+added the wave system and it gets HARDER!
+added an upgrade during INTERMISSSION!!
+EVERYTHING!!!!!!!

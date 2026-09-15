@@ -4,7 +4,9 @@ extends RayCast2D
 @onready var sprite_2d: Sprite2D = $"../Area2D/Sprite2D"
 @onready var line_2d: Line2D = $Line2D
 @onready var gamecontroller: Node = $"../Gamecontroller"
+@onready var upgrade_button: Button = $"../UpgradeButton"
 
+var damage = 70
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -15,7 +17,7 @@ func _process(delta: float) -> void:
 		line_2d.visible = true 
 		var fart = get_collider()
 		if fart is Evil_meteor:
-			fart.health -= 90 * delta
+			fart.health -= damage * delta
 			if fart.health <= 0:
 				gamecontroller.minerals += fart.reward
 				fart.queue_free()
@@ -35,3 +37,11 @@ func _process(delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
 	var target_angle = global_position.angle_to_point(mouse_pos)
 	global_rotation = rotate_toward(global_rotation, target_angle , 5 * delta)
+
+
+func _on_upgrade_button_pressed() -> void:
+	if gamecontroller.minerals >= upgrade_button.upgradeprice:
+		damage *= upgrade_button.damageincrease
+		gamecontroller.minerals -= upgrade_button.upgradeprice
+		upgrade_button.upgradeprice *= upgrade_button.upgradeincrease
+		upgrade_button.upgradeprice = roundi(upgrade_button.upgradeprice)
